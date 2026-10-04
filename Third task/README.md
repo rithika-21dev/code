@@ -1,101 +1,88 @@
-Cisco Packet Tracer: Ping Failure Diagnosis and OSI Layer Troubleshooting
-Project Overview
-This project demonstrates systematic network troubleshooting using Cisco Packet Tracer. It focuses on identifying and resolving common connectivity failures through IPv4 configuration checks, ICMP ping tests, ARP inspection, physical link verification, and Simulation Mode packet analysis.
+Troubleshooting Ping Failures in Cisco Packet Tracer
 
-The lab uses two workstations connected through a Layer 2 switch to demonstrate how network configuration errors and physical connectivity problems affect communication.
+📌 Overview
 
-Objectives
-Diagnose common network connectivity failures.
-Verify IPv4 addressing and subnet configuration.
-Identify physical link and data-link connectivity problems.
-Understand ARP address resolution and ICMP communication.
-Analyze packet flow using Cisco Packet Tracer Simulation Mode.
-Apply corrective actions and verify connectivity restoration.
-Network Topology
-The network consists of two PCs connected to a central Layer 2 switch.
+Ping is a network troubleshooting command used to test connectivity between devices. In Cisco Packet Tracer, ping failures are commonly associated with OSI Layers 1, 2, and 3.
 
-PC0
-PC1
-Switch0
-IP Addressing Table
-Parameter	PC0	PC1
-IPv4 Address	192.168.10.25	192.168.10.26
-Subnet Mask	255.255.255.0	255.255.255.0
-Default Gateway	Not required	Not required
-Both PCs belong to the same IPv4 subnet, so a router is not required for communication between them.
+- Layer 1: Physical Link Issues
+- Layer 2: Cabling and Data Link Issues
+- Layer 3: IP Addressing and Routing Issues
 
-Tools and Technologies
-Cisco Packet Tracer
-IPv4 addressing
-ICMP
-ARP
-Ethernet switching
-OSI reference model
-Network troubleshooting utilities
-Troubleshooting Scenarios
-1. Incorrect IP Address or Subnet
-Compare the IPv4 configuration of both PCs using ipconfig /all. Verify that the addresses and subnet masks are consistent with the intended network.
+🔍 Common Errors & Diagnostic Matrix
 
-2. Default Gateway Configuration
-Inspect the default gateway when troubleshooting communication with remote networks. A gateway is not required for communication between hosts on the same subnet.
+Error Scenario| Typical Ping Output| Root Cause| Diagnosis / Action
+Mismatched Subnet / Mask| Destination host unreachable| Devices belong to different subnets.| Use "ipconfig /all"
+Wrong Default Gateway| Destination host unreachable| Missing or incorrect gateway.| Check gateway using "ipconfig"
+Duplicate IP Address| Intermittent replies| Two devices share the same IP.| Use "arp -a"
+Amber Link Lights| Request timed out| STP convergence.| Wait or use Fast Forward Time
+Wrong Cable Type / Down Link| 100% packet loss| Incorrect cable or disabled interface.| Check "show ip interface brief"
+ARP Table Failure| Initial request timed out| Destination MAC address cannot be resolved.| Check using "arp -a"
 
-3. Duplicate IP Address
-Assigning the same IPv4 address to two devices can cause address conflicts and inconsistent connectivity. Restore unique IP addresses and verify communication.
+🛠️ Systematic Troubleshooting Workflow
 
-4. Physical Link Failure
-Inspect Ethernet cables, switch ports, and link indicators. Restore the physical connection before repeating connectivity tests.
+1. Check Physical Indicators (Layer 1)
 
-5. ARP Resolution
-Inspect ARP requests and replies to understand how a host discovers the destination MAC address before transmitting an Ethernet frame to another local host.
+Check the link lights in the Packet Tracer workspace.
 
-6. ICMP Packet Analysis
-Use Simulation Mode to observe ICMP echo requests and replies and investigate where packets are delayed or dropped.
+- 🔴 Red: Cable disconnected or interface down.
+- 🟠 Amber: STP is calculating.
+- 🟢 Green: Connection is established.
 
-Diagnostic Commands
-Verify Local TCP/IP Functionality
+2. Verify Local Stack & Adapter
+
+Ping Loopback Address:
+
 ping 127.0.0.1
-Verify the Local IPv4 Address
-ipconfig
-Display Detailed IP Configuration
-ipconfig /all
-Ping the Local Host Address
+
+Checks whether the local TCP/IP stack is functioning.
+
+Ping Own IP Address:
+
 ping 192.168.10.25
-Test Communication Between PCs
-ping 192.168.10.26
-Inspect the ARP Cache
-arp -a
-Troubleshooting Methodology
-The lab follows a bottom-up troubleshooting approach:
 
-Verify the physical connection and Ethernet link status.
-Inspect local interface configuration.
-Compare IPv4 addresses and subnet masks.
-Check for duplicate addresses and ARP resolution problems.
-Test connectivity using ICMP ping.
-Inspect ARP and ICMP events in Simulation Mode.
-Apply corrective actions and repeat the tests.
-Document the final configuration and results.
-OSI Layer Mapping
-Layer	Troubleshooting Focus
-Layer 1 – Physical	Ethernet cabling and link status
-Layer 2 – Data Link	Switching, Ethernet frames, and ARP
-Layer 3 – Network	IPv4 addressing, subnet masks, and routing
-Expected Results
-After correcting the simulated faults:
+Checks the PC's network interface configuration.
 
-Both PCs have unique IPv4 addresses.
-Both PCs use the intended subnet mask.
-Ethernet links are operational.
-ARP resolves the destination MAC address.
-ICMP echo requests and replies are observed.
-PC0 and PC1 can communicate successfully.
-Screenshots
-The Screenshots directory contains evidence of the network topology, IP configuration, connectivity tests, troubleshooting scenarios, and packet analysis.
+3. Verify IP Parameters
 
-Project Files
-The PacketTracer directory contains the Cisco Packet Tracer project file.
+Execute the following command:
 
-Open the .pkt file in Cisco Packet Tracer to inspect the topology and repeat the troubleshooting exercises.
+ipconfig /all
 
-Conclusion
-This lab demonstrates a structured approach to diagnosing network connectivity failures in Cisco Packet Tracer. By combining configuration verification, ICMP testing, ARP inspection, physical link checks, and Simulation Mode analysis, it develops practical skills in identifying network faults and verifying corrective actions.
+Verify:
+
+- IP Address
+- Subnet Mask
+- Default Gateway
+
+Ensure devices belong to the same subnet when communicating without a router.
+
+4. Use Packet Tracer Simulation Mode
+
+1. Switch from Realtime Mode to Simulation Mode.
+2. Select Show All/None.
+3. Open Edit Filters.
+4. Enable ICMP and ARP.
+5. Run the ping command again.
+6. Click Capture/Forward.
+7. Inspect packets showing a red X.
+8. Check the In Layers and Out Layers tabs to identify the reason for packet failure.
+
+💻 Important Troubleshooting Commands
+
+Command| Description
+"ping 127.0.0.1"| Tests local TCP/IP functionality.
+"ping IP_address"| Tests network connectivity.
+"ipconfig /all"| Displays IP configuration.
+"arp -a"| Displays the ARP table.
+"show ip interface brief"| Displays router interface status.
+"show running-config"| Displays router configuration.
+
+✅ Conclusion
+
+Troubleshooting ping failures in Cisco Packet Tracer helps identify network connectivity problems. By following a systematic approach from Layer 1 to Layer 3, users can easily identify physical, data link, and IP configuration errors.
+
+Using commands such as "ping", "ipconfig", "arp -a", and "show ip interface brief", along with Simulation Mode, makes network troubleshooting easier and more effective.
+
+---
+
+Technologies Used: Cisco Packet Tracer, Networking, OSI Model, TCP/IP, ICMP, ARP.
